@@ -96,6 +96,9 @@
                                                         <constraint firstAttribute="bottom" secondItem="K8J-Uv-Cul" secondAttribute="bottom" constant="8" id="qXT-F1-s8J"/>
                                                         <constraint firstAttribute="trailing" secondItem="K8J-Uv-Cul" secondAttribute="trailing" constant="8" id="wRp-ia-Agy"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="materialDesign" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -136,7 +139,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mvN-x2-pjU" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YXa-Nd-XND">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YXa-Nd-XND">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
