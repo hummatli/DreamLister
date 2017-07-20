@@ -17,6 +17,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var tfDetails: UITextField!
     
     var stores = [Store]()
+    var itemToEdit: Item?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +51,10 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
 //        ad.saveContext()
     
         getStores()
+        
+        if itemToEdit != nil {
+            loadItemData()
+        }
     }
 
     
@@ -89,7 +94,13 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     
     @IBAction func btnSavedItemPressed(_ sender: UIButton) {
         
-        let item = Item(context: context)
+        var item: Item!
+        
+        if itemToEdit == nil {
+            item = Item(context: context)
+        } else {
+            item = itemToEdit
+        }
         
         if let title = tfTitle.text {
             item.title = title
@@ -109,6 +120,27 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         ad.saveContext()
         
         navigationController?.popViewController(animated: true)
+        
+    }
+    
+    func loadItemData() {
+        
+        if let item = itemToEdit {
+            tfTitle.text = item.title
+            tfPrice.text = "\(item.price)"
+            tfDetails.text = item.details
+            
+            if let store = item.toStore {
+                
+                for s in stores {
+                    if s.name == store.name {
+                        pickerStore.selectRow(stores.index(of: s)!, inComponent: 0, animated: false)
+                        break
+                    }
+                }
+            }
+            
+        }
         
     }
     
