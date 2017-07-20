@@ -9,15 +9,17 @@
 import UIKit
 import CoreData
 
-class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var pickerStore: UIPickerView!
     @IBOutlet weak var tfTitle: UITextField!
     @IBOutlet weak var tfPrice: UITextField!
     @IBOutlet weak var tfDetails: UITextField!
+    @IBOutlet weak var imgThumb: UIImageView!
     
     var stores = [Store]()
     var itemToEdit: Item?
+    var imagePicker: UIImagePickerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         
         pickerStore.dataSource = self
         pickerStore.delegate = self
+        
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
         
         
 //        let store = Store(context: context)
@@ -96,11 +101,17 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         
         var item: Item!
         
+        let picture = Image(context: context)
+        picture.image = imgThumb.image
+
+        
         if itemToEdit == nil {
             item = Item(context: context)
         } else {
             item = itemToEdit
         }
+
+        item.toImage = picture
         
         if let title = tfTitle.text {
             item.title = title
@@ -123,12 +134,40 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         
     }
     
+    @IBAction func btnDeletePressed(_ sender: UIBarButtonItem) {
+        if let item = itemToEdit {
+            context.delete(item)
+            ad.saveContext()
+        }
+        
+        navigationController?.popViewController(animated: true)
+
+    }
+    
+    @IBAction func addImagePressed(_ sender: Any) {
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imgThumb.image = img
+        }
+        
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
     func loadItemData() {
         
         if let item = itemToEdit {
             tfTitle.text = item.title
             tfPrice.text = "\(item.price)"
             tfDetails.text = item.details
+            
+            imgThumb.image = item.toImage?.image as? UIImage
             
             if let store = item.toStore {
                 
